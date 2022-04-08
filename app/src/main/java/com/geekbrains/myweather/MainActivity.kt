@@ -27,6 +27,13 @@ class MainActivity : AppCompatActivity() {
                 print("${n * n} \t")
             }
 
+            for(i in 1..9){
+                for(j in 1..9){
+                    print("${i * j} \t")
+                }
+                println()
+            }
+
 
             val noteOne = Note("Заметка 1", "Текст заметки 1")
             val noteSecond = noteOne.copy(title = "Заметка 2", description = "Текст заметки 2")
