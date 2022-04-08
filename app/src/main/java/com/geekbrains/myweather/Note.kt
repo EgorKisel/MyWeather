@@ -1,5 +1,7 @@
 package com.geekbrains.myweather
 
+import android.view.View
+
 data class Note(val title: String = "Заметка", val description: String = "Текст заметки")
 
 object NotesBase{
@@ -9,5 +11,12 @@ object NotesBase{
         }else{
             return "мир сошел с ума!"
         }
+    }
+
+    val imp = object : View.OnClickListener{
+        override fun onClick(v: View?) {
+            TODO("Not yet implemented")
+        }
+
     }
 }
