@@ -23,6 +23,9 @@ class MainActivity : AppCompatActivity() {
             intent.putExtra("key", "Kotlin")
             startActivity(intent)
 
+            for(n in 1..9){
+                print("${n * n} \t")
+            }
 
 
             val noteOne = Note("Заметка 1", "Текст заметки 1")
