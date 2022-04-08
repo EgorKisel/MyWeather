@@ -31,8 +31,10 @@ class MainActivity : AppCompatActivity() {
                 val noteSecondToString: String = noteSecond.title + "" + noteSecond.description
                 return noteSecondToString
             }
+
             Log.d("tag", noteSecond.title)
-            Log.d("listOf", "$list")
+            Log.d("tag", "$list")
+            Log.d("tag", "${NotesBase.getTest()}")
         }
     }
     private val list = listOf("City", "Weather", "Year", "Day")
