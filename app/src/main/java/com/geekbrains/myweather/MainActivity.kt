@@ -35,6 +35,13 @@ class MainActivity : AppCompatActivity() {
             }
 
 
+            var i = 10
+            while(i > 0){
+                println(i*i)
+                i--;
+            }
+
+
             val noteOne = Note("Заметка 1", "Текст заметки 1")
             val noteSecond = noteOne.copy(title = "Заметка 2", description = "Текст заметки 2")
             fun noteToString(): String {
