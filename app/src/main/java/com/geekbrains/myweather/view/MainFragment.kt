@@ -13,6 +13,7 @@ import com.geekbrains.myweather.R
 import com.geekbrains.myweather.databinding.FragmentMainBinding
 import com.geekbrains.myweather.viewmodel.AppState
 import com.geekbrains.myweather.viewmodel.MainViewModel
+import com.google.android.material.snackbar.Snackbar
 
 class MainFragment : Fragment() {
 
@@ -46,6 +47,7 @@ class MainFragment : Fragment() {
             is AppState.Error -> {
                 binding.loadingLayout.visibility = View.GONE
                 binding.message.text = "Не получилось ${data.error}"
+                Snackbar.make(binding.mainView, "Не получилось ${data.error}", Snackbar.LENGTH_SHORT).show()
             }
             is AppState.Loading -> {
                 binding.loadingLayout.visibility = View.VISIBLE
@@ -53,6 +55,7 @@ class MainFragment : Fragment() {
             is AppState.Success -> {
                 binding.loadingLayout.visibility = View.GONE
                 binding.message.text = "Получилось"
+                Snackbar.make(binding.mainView, "Получилось", Snackbar.LENGTH_SHORT).show()
                 //Toast.makeText(requireContext(), "РАБОТАЕТ", Toast.LENGTH_SHORT).show()
             }
         }
