@@ -10,15 +10,21 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.geekbrains.myweather.R
+import com.geekbrains.myweather.databinding.FragmentMainBinding
 import com.geekbrains.myweather.viewmodel.MainViewModel
 
 class MainFragment : Fragment() {
+
+    lateinit var binding: FragmentMainBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_main, container, false)
+        binding = FragmentMainBinding.inflate(inflater, container, false)
+        // binding.btnOne.setOnClickListener{}
+        // return inflater.inflate(R.layout.fragment_main, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
