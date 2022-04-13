@@ -1,5 +1,6 @@
 package com.geekbrains.myweather.view
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -42,11 +43,11 @@ class MainFragment : Fragment() {
         viewModel.getWeather()
     }
 
+    @SuppressLint("SetTextI18n")
     private fun renderData(data: AppState){
         when (data){
             is AppState.Error -> {
                 binding.loadingLayout.visibility = View.GONE
-                binding.message.text = "Не получилось ${data.error}"
                 Snackbar.make(binding.mainView, "Не получилось ${data.error}", Snackbar.LENGTH_SHORT).show()
             }
             is AppState.Loading -> {
@@ -54,7 +55,10 @@ class MainFragment : Fragment() {
             }
             is AppState.Success -> {
                 binding.loadingLayout.visibility = View.GONE
-                binding.message.text = "Получилось"
+                binding.temperatureValue.text = data.weatherData.temperature.toString()
+                binding.cityName.text = data.weatherData.city.name.toString()
+                binding.feelsLikeValue.text = data.weatherData.feelsLike.toString()
+                binding.cityCoordinates.text = "${data.weatherData.city.lat} ${data.weatherData.city.lon}"
                 Snackbar.make(binding.mainView, "Получилось", Snackbar.LENGTH_SHORT).show()
                 //Toast.makeText(requireContext(), "РАБОТАЕТ", Toast.LENGTH_SHORT).show()
             }
