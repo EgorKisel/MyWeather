@@ -15,13 +15,14 @@ private val repository: RepositoryImpl = RepositoryImpl()
         return liveData
     }
 
-    fun getWeather() {
+    fun getWeatherRussia() = getWeather(true)
+    fun getWeatherWorld() = getWeather(false)
+
+    private fun getWeather(isRussian: Boolean) {
         Thread() {
             liveData.postValue(AppState.Loading(0))
-            if ((0..10).random() > 7)
-                liveData.postValue(AppState.Success(repository.getWeatherFromServer()))
-            else
-                liveData.postValue(AppState.Error(IllegalAccessException()))
+            val answer = if (!isRussian) repository.getWorldWeatherFromLocalStorage() else repository.getRussianWeatherFromLocalStorage()
+            liveData.postValue(AppState.Success(answer))
         }.start()
     }
 }
