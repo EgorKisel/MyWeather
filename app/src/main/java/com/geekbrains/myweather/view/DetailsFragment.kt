@@ -33,17 +33,13 @@ class DetailsFragment : Fragment() {
         return binding.root
     }
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         arguments?.getParcelable<Weather>(KEY_BUNDLE_WEATHER)?.let {
             renderData(it)
         }
-
-
     }
 
-    @SuppressLint("SetTextI18n")
     private fun renderData(weather: Weather) {
         with(binding) {
             loadingLayout.visibility = View.GONE
@@ -54,6 +50,7 @@ class DetailsFragment : Fragment() {
         }
         mainView.showSnackBar()
     }
+
     private fun View.showSnackBar(){
         Snackbar.make(mainView, "Получилось", Snackbar.LENGTH_SHORT).show()
     }
