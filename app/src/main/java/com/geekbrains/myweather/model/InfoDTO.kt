@@ -1,7 +1,11 @@
 package com.geekbrains.myweather.model
+import com.google.gson.annotations.SerializedName
 
 data class InfoDTO(
-    val lat: Int,
-    val lon: Int,
+    @SerializedName ("lat")
+    val lat: Double,
+    @SerializedName ("lon")
+    val lon: Double,
+    @SerializedName ("url")
     val url: String
 )
