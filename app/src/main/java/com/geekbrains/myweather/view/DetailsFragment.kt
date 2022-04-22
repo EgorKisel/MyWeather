@@ -6,15 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.geekbrains.myweather.databinding.FragmentDetailsBinding
-import com.geekbrains.myweather.model.OnServerResponse
-import com.geekbrains.myweather.model.Weather
-import com.geekbrains.myweather.model.WeatherDTO
-import com.geekbrains.myweather.model.WeatherLoader
+import com.geekbrains.myweather.model.*
 import com.geekbrains.myweather.utils.KEY_BUNDLE_WEATHER
+import com.geekbrains.myweather.viewmodel.AppError
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_details.*
 
-class DetailsFragment : Fragment(), OnServerResponse {
+class DetailsFragment : Fragment(), OnServerResponse, OnErrorListener {
 
     private var _binding: FragmentDetailsBinding? = null
     private val binding: FragmentDetailsBinding
@@ -42,7 +40,8 @@ class DetailsFragment : Fragment(), OnServerResponse {
         arguments?.getParcelable<Weather>(KEY_BUNDLE_WEATHER)?.let {
             currentCityName = it.city.name
             Thread {
-                WeatherLoader(this@DetailsFragment).loadWeather(it.city.lat, it.city.lon)
+                WeatherLoader(this@DetailsFragment, this@DetailsFragment)
+                    .loadWeather(it.city.lat, it.city.lon)
             }.start()
         }
     }
@@ -73,5 +72,9 @@ class DetailsFragment : Fragment(), OnServerResponse {
 
     override fun onResponse(weatherDTO: WeatherDTO) {
         renderData(weatherDTO)
+    }
+
+    override fun onError(error: AppError) {
+        Snackbar.make(mainView, "$error", Snackbar.LENGTH_SHORT).show()
     }
 }
