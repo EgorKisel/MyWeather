@@ -8,11 +8,11 @@ import androidx.fragment.app.Fragment
 import com.geekbrains.myweather.databinding.FragmentDetailsBinding
 import com.geekbrains.myweather.model.*
 import com.geekbrains.myweather.utils.KEY_BUNDLE_WEATHER
-import com.geekbrains.myweather.viewmodel.AppError
+import com.geekbrains.myweather.viewmodel.ResponseState
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_details.*
 
-class DetailsFragment : Fragment(), OnServerResponse, OnErrorListener {
+class DetailsFragment : Fragment(), OnServerResponse, OnServerResponseListener {
 
     private var _binding: FragmentDetailsBinding? = null
     private val binding: FragmentDetailsBinding
@@ -54,12 +54,12 @@ class DetailsFragment : Fragment(), OnServerResponse, OnErrorListener {
             feelsLikeValue.text = weather.factDTO.feelsLike.toString()
             cityCoordinates.text = "${weather.infoDTO.lat} ${weather.infoDTO.lon}"
         }
-        mainView.showSnackBar()
+       // mainView.showSnackBar()
     }
 
-    private fun View.showSnackBar() {
-        Snackbar.make(mainView, "Получилось", Snackbar.LENGTH_SHORT).show()
-    }
+//    private fun View.showSnackBar() {
+//        Snackbar.make(mainView, "Получилось", Snackbar.LENGTH_SHORT).show()
+//    }
 
     companion object {
         @JvmStatic
@@ -74,7 +74,7 @@ class DetailsFragment : Fragment(), OnServerResponse, OnErrorListener {
         renderData(weatherDTO)
     }
 
-    override fun onError(error: AppError) {
-        Snackbar.make(mainView, "$error", Snackbar.LENGTH_SHORT).show()
+    override fun onError(error: ResponseState) {
+        Snackbar.make(mainView, "$error", Snackbar.LENGTH_LONG).show()
     }
 }
