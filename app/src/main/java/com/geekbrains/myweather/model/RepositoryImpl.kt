@@ -7,7 +7,6 @@ class RepositoryImpl : Repository {
     }
 
     override fun getWorldWeatherFromLocalStorage() = getWorldCities()
-
     override fun getRussianWeatherFromLocalStorage() = getRussianCities()
 
 }

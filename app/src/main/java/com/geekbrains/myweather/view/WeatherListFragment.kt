@@ -19,6 +19,7 @@ import com.google.android.material.snackbar.Snackbar
 
 class WeatherListFragment : Fragment(), OnItemListClickListener {
 
+    private var isRussian = true
     private var _binding: FragmentWeatherListBinding? = null
     private val binding: FragmentWeatherListBinding
         get() {
@@ -40,7 +41,6 @@ class WeatherListFragment : Fragment(), OnItemListClickListener {
         return binding.root
     }
 
-    private var isRussian = true
     private val viewModel: MainViewModel by lazy {
         ViewModelProvider(this).get(MainViewModel::class.java)
     }
@@ -74,7 +74,6 @@ class WeatherListFragment : Fragment(), OnItemListClickListener {
         viewModel.getWeatherRussia()
     }
 
-    @SuppressLint("SetTextI18n")
     private fun renderData(data: AppState) {
         when (data) {
             is AppState.Error -> {
