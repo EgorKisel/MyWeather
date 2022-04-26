@@ -4,9 +4,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.AppCompatImageView
 import androidx.fragment.app.Fragment
+import coil.ImageLoader
+import coil.decode.SvgDecoder
+import coil.request.ImageRequest
 import com.geekbrains.myweather.databinding.FragmentDetailsBinding
-import com.geekbrains.myweather.model.*
+import com.geekbrains.myweather.model.OnServerResponse
+import com.geekbrains.myweather.model.OnServerResponseListener
+import com.geekbrains.myweather.model.Weather
+import com.geekbrains.myweather.model.WeatherLoader
+import com.geekbrains.myweather.model.dto.WeatherDTO
 import com.geekbrains.myweather.utils.KEY_BUNDLE_WEATHER
 import com.geekbrains.myweather.viewmodel.ResponseState
 import com.google.android.material.snackbar.Snackbar
@@ -33,14 +41,14 @@ class DetailsFragment : Fragment(), OnServerResponse, OnServerResponseListener {
         return binding.root
     }
 
-    lateinit var currentCityName: String
+    private lateinit var currentCityName: String
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         arguments?.getParcelable<Weather>(KEY_BUNDLE_WEATHER)?.let {
             currentCityName = it.city.name
             Thread {
-                WeatherLoader(this@DetailsFragment, this@DetailsFragment)
+                 WeatherLoader(this@DetailsFragment, this@DetailsFragment)
                     .loadWeather(it.city.lat, it.city.lon)
             }.start()
         }
@@ -53,13 +61,23 @@ class DetailsFragment : Fragment(), OnServerResponse, OnServerResponseListener {
             cityName.text = currentCityName
             feelsLikeValue.text = weather.factDTO.feelsLike.toString()
             cityCoordinates.text = "${weather.infoDTO.lat} ${weather.infoDTO.lon}"
+            // Добавил иконку состояния погоды
+            icon.loadSvg("https://yastatic.net/weather/i/icons/funky/dark/${weather.factDTO.icon}.svg")
         }
-       // mainView.showSnackBar()
     }
 
-//    private fun View.showSnackBar() {
-//        Snackbar.make(mainView, "Получилось", Snackbar.LENGTH_SHORT).show()
-//    }
+    fun AppCompatImageView.loadSvg(url: String){
+        val imageLoader = ImageLoader.Builder(this.context)
+            .componentRegistry {add(SvgDecoder(this@loadSvg.context))}
+            .build()
+        val request = ImageRequest.Builder(this.context)
+            .crossfade(true)
+            .crossfade(500)
+            .data(url)
+            .target(this)
+            .build()
+        imageLoader.enqueue(request)
+    }
 
     companion object {
         @JvmStatic

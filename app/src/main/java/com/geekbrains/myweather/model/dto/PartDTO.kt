@@ -1,4 +1,4 @@
-package com.geekbrains.myweather.model
+package com.geekbrains.myweather.model.dto
 
 data class PartDTO(
     val condition: String,

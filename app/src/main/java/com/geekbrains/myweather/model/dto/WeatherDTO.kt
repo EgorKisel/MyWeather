@@ -1,5 +1,8 @@
-package com.geekbrains.myweather.model
+package com.geekbrains.myweather.model.dto
 
+import com.geekbrains.myweather.model.dto.FactDTO
+import com.geekbrains.myweather.model.dto.ForecastDTO
+import com.geekbrains.myweather.model.dto.InfoDTO
 import com.google.gson.annotations.SerializedName
 
 data class WeatherDTO(

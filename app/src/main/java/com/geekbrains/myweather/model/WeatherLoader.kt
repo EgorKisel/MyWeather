@@ -3,6 +3,7 @@ package com.geekbrains.myweather.model
 import android.os.Handler
 import android.os.Looper
 import com.geekbrains.myweather.BuildConfig
+import com.geekbrains.myweather.model.dto.WeatherDTO
 import com.geekbrains.myweather.viewmodel.ResponseState
 import com.google.gson.Gson
 import java.io.BufferedReader
