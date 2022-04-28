@@ -19,7 +19,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.First"/>
-    </application>
+        <service android:name=".view.details.DetailsService"/>
+        <receiver
+            android:name=".model.MyBroadcastReceiver"
+            android:exported="true"
+            android:enabled="true">
+            <intent-filter>
+                <action android:name="android.intent.action.ACTION_AIRPLANE_MODE_CHANGED" />
 
+                <category android:name="myaction" />
+            </intent-filter>
+        </receiver>
+    </application>
 </manifest>

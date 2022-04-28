@@ -3,6 +3,9 @@ package com.geekbrains.myweather.model
 import android.os.Handler
 import android.os.Looper
 import com.geekbrains.myweather.BuildConfig
+import com.geekbrains.myweather.model.dto.WeatherDTO
+import com.geekbrains.myweather.utils.TIME_OUT
+import com.geekbrains.myweather.utils.YANDEX_API_KEY
 import com.geekbrains.myweather.viewmodel.ResponseState
 import com.google.gson.Gson
 import java.io.BufferedReader
@@ -18,9 +21,9 @@ class WeatherLoader(private val onServerResponseListener: OnServerResponse, priv
         val uri = URL(urlText)
         val urlConnection: HttpsURLConnection = (uri.openConnection() as HttpsURLConnection)
             .apply {
-            connectTimeout = 1000
-            readTimeout = 1000
-            addRequestProperty("X-Yandex-API-Key", BuildConfig.WEATHER_API_KEY)
+            connectTimeout = TIME_OUT
+            readTimeout = TIME_OUT
+            addRequestProperty(YANDEX_API_KEY, BuildConfig.WEATHER_API_KEY)
         }
 
         Thread {
@@ -43,13 +46,18 @@ class WeatherLoader(private val onServerResponseListener: OnServerResponse, priv
                         onErrorListener.onError(ResponseState.Message2("Клиентская ошибка"))
                     }
                     in responseOk -> {
+                        val buffer = BufferedReader(InputStreamReader(urlConnection.inputStream))
+                        val weatherDTO: WeatherDTO = Gson().fromJson(buffer, WeatherDTO::class.java)
+                        Handler(Looper.getMainLooper()).post {
+                            onServerResponseListener.onResponse(weatherDTO)
+                        }
                         onErrorListener.onError(ResponseState.Message3("Успешное соединение"))
                     }
                 }
-
-                Handler(Looper.getMainLooper()).post{
-                    onServerResponseListener.onResponse(weatherDTO)
-                }
+//
+//                Handler(Looper.getMainLooper()).post{
+//                    onServerResponseListener.onResponse(weatherDTO)
+//                }
             }catch (e: Exception){
                 onErrorListener.onError(ResponseState.Message1("Что-то пошло не так"))
             } finally {
