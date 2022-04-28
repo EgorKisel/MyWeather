@@ -1,6 +1,5 @@
 package com.geekbrains.myweather.view
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +12,7 @@ import com.geekbrains.myweather.R
 import com.geekbrains.myweather.databinding.FragmentWeatherListBinding
 import com.geekbrains.myweather.model.Weather
 import com.geekbrains.myweather.utils.KEY_BUNDLE_WEATHER
+import com.geekbrains.myweather.view.details.DetailsFragment
 import com.geekbrains.myweather.viewmodel.AppState
 import com.geekbrains.myweather.viewmodel.MainViewModel
 import com.google.android.material.snackbar.Snackbar

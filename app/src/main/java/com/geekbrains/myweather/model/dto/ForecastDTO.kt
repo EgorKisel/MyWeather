@@ -1,5 +1,9 @@
 package com.geekbrains.myweather.model.dto
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+
+@Parcelize
 data class ForecastDTO(
     val date: String,
     val dateTs: Int,
@@ -9,4 +13,4 @@ data class ForecastDTO(
     val sunrise: String,
     val sunset: String,
     val week: Int
-)
+): Parcelable
