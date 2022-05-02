@@ -26,7 +26,7 @@ class DetailsService(val name: String = ""): IntentService(name) {
 
             try {
 
-            val urlText = "https://api.weather.yandex.ru/v2/informers?lat=$lat&lon=$lon"
+            val urlText = "$YANDEX_DOMAIN${YANDEX_ENDPOINT}lat=$lat&lon=$lon"
             val uri = URL(urlText)
             val urlConnection: HttpsURLConnection = (uri.openConnection() as HttpsURLConnection)
                 .apply {

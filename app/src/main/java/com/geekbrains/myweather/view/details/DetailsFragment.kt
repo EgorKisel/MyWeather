@@ -1,33 +1,24 @@
 package com.geekbrains.myweather.view.details
 
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import android.content.Intent.ACTION_AIRPLANE_MODE_CHANGED
-import android.content.IntentFilter
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.fragment.app.Fragment
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import coil.ImageLoader
 import coil.decode.SvgDecoder
 import coil.request.ImageRequest
 import com.geekbrains.myweather.databinding.FragmentDetailsBinding
-import com.geekbrains.myweather.model.OnServerResponse
-import com.geekbrains.myweather.model.OnServerResponseListener
 import com.geekbrains.myweather.model.Weather
-import com.geekbrains.myweather.model.WeatherLoader
-import com.geekbrains.myweather.model.dto.WeatherDTO
-import com.geekbrains.myweather.utils.*
-import com.geekbrains.myweather.viewmodel.ResponseState
+import com.geekbrains.myweather.utils.KEY_BUNDLE_WEATHER
+import com.geekbrains.myweather.viewmodel.DetailsState
+import com.geekbrains.myweather.viewmodel.DetailsViewModel
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.fragment_details.*
 
-class DetailsFragment : Fragment(), OnServerResponse, OnServerResponseListener {
+class DetailsFragment : Fragment() {
 
     private var _binding: FragmentDetailsBinding? = null
     private val binding: FragmentDetailsBinding
@@ -38,17 +29,6 @@ class DetailsFragment : Fragment(), OnServerResponse, OnServerResponseListener {
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
-        LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(receiver)
-    }
-
-    private val receiver = object : BroadcastReceiver(){
-        override fun onReceive (context: Context?, intent: Intent?){
-            intent?.let { intent ->
-                intent.getParcelableExtra<WeatherDTO>(KEY_BUNDLE_SERVICE_BROADCAST_WEATHER)?.let {
-                    onResponse(it)
-                }
-            }
-        }
     }
 
     override fun onCreateView(
@@ -59,35 +39,46 @@ class DetailsFragment : Fragment(), OnServerResponse, OnServerResponseListener {
         return binding.root
     }
 
-    private lateinit var currentCityName: String
+    private val viewModel: DetailsViewModel by lazy {
+        ViewModelProvider(this).get(DetailsViewModel::class.java)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        LocalBroadcastManager.getInstance(requireContext()).registerReceiver(receiver, IntentFilter(
-            KEY_WAVE_SERVICE_BROADCAST))
-
+        viewModel.getLiveData().observe(viewLifecycleOwner, object: Observer<DetailsState>{
+            override fun onChanged(t: DetailsState) {
+                renderData(t)
+            }
+        })
         arguments?.getParcelable<Weather>(KEY_BUNDLE_WEATHER)?.let {
-            currentCityName = it.city.name
-
-            requireActivity().startService(Intent(requireContext(), DetailsService::class.java).apply {
-                putExtra(KEY_BUNDLE_LAT, it.city.lat)
-                putExtra(KEY_BUNDLE_LON, it.city.lon)
-            })
+            viewModel.getWeather(it.city)
         }
-
     }
 
-    private fun renderData(weather: WeatherDTO) {
-        with(binding) {
-            loadingLayout.visibility = View.GONE
-            temperatureValue.text = weather.factDTO.temperature.toString()
-            cityName.text = currentCityName
-            feelsLikeValue.text = weather.factDTO.feelsLike.toString()
-            cityCoordinates.text = "${weather.infoDTO.lat} ${weather.infoDTO.lon}"
-            // Добавил иконку состояния погоды
-            icon.loadSvg("https://yastatic.net/weather/i/icons/funky/dark/${weather.factDTO.icon}.svg")
+    private fun renderData(detailsState: DetailsState) {
+        when(detailsState){
+            is DetailsState.Error ->{
+
+            }
+            is DetailsState.Loading ->{
+
+            }
+            is DetailsState.Success ->{
+                val weather = detailsState.weather
+                with(binding) {
+                    loadingLayout.visibility = View.GONE
+                    temperatureValue.text = weather.temperature.toString()
+                    cityName.text = weather.city.name
+                    feelsLikeValue.text = weather.feelsLike.toString()
+                    cityCoordinates.text = "${weather.city.lat} ${weather.city.lon}"
+                    Snackbar.make(mainView, "Success", Snackbar.LENGTH_SHORT).show()
+                    // Добавил иконку состояния погоды
+                    icon.loadSvg("https://yastatic.net/weather/i/icons/funky/dark/${weather.icon}.svg")
+                }
+            }
         }
+
     }
 
     private fun AppCompatImageView.loadSvg(url: String){
@@ -110,13 +101,5 @@ class DetailsFragment : Fragment(), OnServerResponse, OnServerResponseListener {
             fragment.arguments = bundle
             return fragment
         }
-    }
-
-    override fun onResponse(weatherDTO: WeatherDTO) {
-        renderData(weatherDTO)
-    }
-
-    override fun onError(error: ResponseState) {
-        Snackbar.make(mainView, "$error", Snackbar.LENGTH_LONG).show()
     }
 }
