@@ -1,5 +1,7 @@
 package com.geekbrains.myweather.utils
 
+import com.geekbrains.myweather.domain.room.HistoryEntity
+import com.geekbrains.myweather.model.City
 import com.geekbrains.myweather.model.Weather
 import com.geekbrains.myweather.model.dto.FactDTO
 import com.geekbrains.myweather.model.dto.WeatherDTO
@@ -20,10 +22,23 @@ const val TIME_OUT = 1000
 const val KEY_WAVE_SERVICE_BROADCAST = "wave_service_broadcast"
 private const val PROCESS_ERROR = "Обработка ошибки"
 
+const val KEY_SP_NAME_1 = "fileName1"
+const val KEY_SP_FILE_NAME_1_KEY_IS_RUSSIAN = "is_russian"
+
 class Utils {
 }
 
 fun convertDtoToModel(weatherDTO: WeatherDTO): Weather {
     val fact: FactDTO = weatherDTO.factDTO
     return (Weather(getDefaultCity(), fact.temperature, fact.feelsLike, fact.icon))
+}
+
+fun convertHistoryEntityToWeather(entityList: List<HistoryEntity>): List<Weather>{
+    return entityList.map{
+        Weather(City(it.city, 0.0, 0.0), it.temperature, it.feelsLike, it.icon)
+    }
+}
+
+fun convertWeatherToEntity(weather: Weather): HistoryEntity{
+    return HistoryEntity(0, weather.city.name, weather.temperature, weather.feelsLike, weather.icon)
 }

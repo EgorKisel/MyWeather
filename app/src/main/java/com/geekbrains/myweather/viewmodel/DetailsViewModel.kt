@@ -2,13 +2,11 @@ package com.geekbrains.myweather.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.geekbrains.myweather.model.City
-import com.geekbrains.myweather.model.DetailsRepository
-import com.geekbrains.myweather.model.DetailsRepositoryRetrofit2Impl
-import com.geekbrains.myweather.model.Weather
+import com.geekbrains.myweather.model.*
 
 class DetailsViewModel(private val liveData: MutableLiveData<DetailsState> = MutableLiveData(),
-                       private val repository: DetailsRepository = DetailsRepositoryRetrofit2Impl()
+                       private val repository: DetailsRepositoryOne = DetailsRepositoryOneRetrofit2Impl(),
+                       private val repositoryAdd: DetailsRepositoryAdd = DetailsRepositoryOneRoomImpl()
 ) :ViewModel() {
     fun getLiveData() = liveData
     fun getWeather(city: City){
@@ -16,6 +14,7 @@ class DetailsViewModel(private val liveData: MutableLiveData<DetailsState> = Mut
         repository.getWeatherDetails(city, object : Callback{
             override fun onResponse(weather: Weather) {
                 liveData.postValue(DetailsState.Success(weather))
+                repositoryAdd.addWeather(weather)
             }
 
             override fun onFail() {

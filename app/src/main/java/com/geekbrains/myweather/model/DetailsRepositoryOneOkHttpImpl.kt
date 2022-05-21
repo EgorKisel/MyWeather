@@ -1,6 +1,5 @@
 package com.geekbrains.myweather.model
 
-import android.view.View
 import com.geekbrains.myweather.BuildConfig
 import com.geekbrains.myweather.model.dto.WeatherDTO
 import com.geekbrains.myweather.utils.YANDEX_API_KEY
@@ -12,9 +11,7 @@ import com.google.gson.Gson
 import okhttp3.OkHttpClient
 import okhttp3.Request
 
-import java.io.IOException
-
-class DetailsRepositoryOkHttpImpl: DetailsRepository {
+class DetailsRepositoryOneOkHttpImpl: DetailsRepositoryOne {
     override fun getWeatherDetails(city: City, callback: DetailsViewModel.Callback) {
 
             val client = OkHttpClient()
