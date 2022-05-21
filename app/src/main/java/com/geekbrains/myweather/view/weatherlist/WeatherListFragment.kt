@@ -1,5 +1,6 @@
 package com.geekbrains.myweather.view.weatherlist
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -16,6 +17,8 @@ import com.geekbrains.myweather.view.details.DetailsFragment
 import com.geekbrains.myweather.viewmodel.AppState
 import com.geekbrains.myweather.viewmodel.MainViewModel
 import com.google.android.material.snackbar.Snackbar
+
+private const val IS_WORLD_KEY = "IS_WORLD_KEY"
 
 class WeatherListFragment : Fragment(), OnItemListClickListener {
 
@@ -49,29 +52,45 @@ class WeatherListFragment : Fragment(), OnItemListClickListener {
         super.onViewCreated(view, savedInstanceState)
         binding.recyclerView.adapter = adapter
 
+        binding.floatingActionButton.setOnClickListener {
+            changeWeatherDataSet()
+        }
+
         val observer = Observer<AppState> { data -> renderData(data) }
         viewModel.getData().observe(viewLifecycleOwner, observer)
-        binding.floatingActionButton.setOnClickListener {
-            isRussian = !isRussian
-            if (isRussian) {
-                viewModel.getWeatherRussia()
-                binding.floatingActionButton.setImageDrawable(
-                    ContextCompat.getDrawable(
-                        requireContext(),
-                        R.drawable.ic_russia
-                    )
-                )
+        showListOfTowns()
+
+    }
+
+    private fun changeWeatherDataSet() {
+        if (isRussian) {
+            viewModel.getWeatherWorld()
+            binding.floatingActionButton.setImageResource(R.drawable.ic_earth)
+        } else {
+            viewModel.getWeatherRussia()
+            binding.floatingActionButton.setImageResource(R.drawable.ic_russia)
+        }.also { isRussian = !isRussian }
+
+        saveListOfTowns()
+    }
+
+    private fun showListOfTowns(){
+        activity?.let {
+            if(it.getPreferences(Context.MODE_PRIVATE).getBoolean(IS_WORLD_KEY, false)) {
+                changeWeatherDataSet()
             } else {
-                viewModel.getWeatherWorld()
-                binding.floatingActionButton.setImageDrawable(
-                    ContextCompat.getDrawable(
-                        requireContext(),
-                        R.drawable.ic_earth
-                    )
-                )
+                viewModel.getWeatherRussia()
             }
         }
-        viewModel.getWeatherRussia()
+    }
+
+    private fun saveListOfTowns(){
+        activity?.let {
+            with(it.getPreferences(Context.MODE_PRIVATE).edit()){
+                putBoolean(IS_WORLD_KEY, !isRussian)
+                apply()
+            }
+        }
     }
 
     private fun renderData(data: AppState) {
