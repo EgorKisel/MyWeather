@@ -6,6 +6,11 @@
         android:id="@+id/action_history"
         android:icon="@drawable/ic_baseline_history_24"
         android:title="@string/history"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/action_work_with_content_provider"
+        android:title="@string/action_work_with_content_provider"
         app:showAsAction="always"/>
 
 </menu>
