@@ -67,8 +67,9 @@ class WorkWithContentProviderFragment : Fragment() {
             .show()
     }
 
+    private val REQUEST_CODE = 999
     private fun mRequestPermission() {
-        requestPermissions(arrayOf(Manifest.permission.READ_CONTACTS), 999)
+        requestPermissions(arrayOf(Manifest.permission.READ_CONTACTS), REQUEST_CODE)
     }
 
     override fun onRequestPermissionsResult(
