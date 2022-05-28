@@ -27,6 +27,7 @@ import com.geekbrains.myweather.view.details.DetailsFragment
 import com.geekbrains.myweather.viewmodel.AppState
 import com.geekbrains.myweather.viewmodel.MainViewModel
 import com.google.android.material.snackbar.Snackbar
+import java.util.*
 
 private const val IS_WORLD_KEY = "IS_WORLD_KEY"
 
@@ -143,7 +144,7 @@ class WeatherListFragment : Fragment(), OnItemListClickListener {
     }
 
     fun getAddressByLocation(location: Location){
-        val geocoder = Geocoder(requireContext())
+        val geocoder = Geocoder(requireContext(), Locale("ru", "RU"))
         val timeStump = System.currentTimeMillis()
         Thread{
             val addressText = geocoder.getFromLocation(location.latitude, location.longitude, 3)[0].getAddressLine(0)

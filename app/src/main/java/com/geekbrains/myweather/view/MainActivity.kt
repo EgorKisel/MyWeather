@@ -8,6 +8,8 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import com.geekbrains.myweather.MyApp
 import com.geekbrains.myweather.R
+import com.geekbrains.myweather.lesson10.MapsFragment
+import com.geekbrains.myweather.lesson10.MapsFragmentYandex
 import com.geekbrains.myweather.lesson9.WorkWithContentProviderFragment
 import com.geekbrains.myweather.model.MyBroadcastReceiver
 import com.geekbrains.myweather.utils.KEY_SP_FILE_NAME_1_KEY_IS_RUSSIAN
@@ -59,6 +61,18 @@ class MainActivity : AppCompatActivity() {
             R.id.action_work_with_content_provider -> {
                 supportFragmentManager.beginTransaction()
                     .add(R.id.container, WorkWithContentProviderFragment.newInstance())
+                    .addToBackStack("")
+                    .commit()
+            }
+            R.id.action_menu_maps -> {
+                supportFragmentManager.beginTransaction()
+                    .add(R.id.container, MapsFragment())
+                    .addToBackStack("")
+                    .commit()
+            }
+            R.id.action_menu_maps_yandex -> {
+                supportFragmentManager.beginTransaction()
+                    .add(R.id.container, MapsFragmentYandex())
                     .addToBackStack("")
                     .commit()
             }
