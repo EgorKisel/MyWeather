@@ -1,11 +1,16 @@
 package com.geekbrains.myweather.view
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.Context
 import android.content.IntentFilter
+import android.graphics.drawable.Icon
+import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.NotificationCompat
 import com.geekbrains.myweather.MyApp
 import com.geekbrains.myweather.R
 import com.geekbrains.myweather.lesson10.MapsFragment
@@ -19,6 +24,11 @@ import com.geekbrains.myweather.view.weatherlist.WeatherListFragment
 
 
 class MainActivity : AppCompatActivity() {
+
+
+
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -40,10 +50,12 @@ class MainActivity : AppCompatActivity() {
 
         MyApp.getHistoryDao().getAll()
 
-
         val defaultValueIsRussian = true
         sp.getBoolean(KEY_SP_FILE_NAME_1_KEY_IS_RUSSIAN, defaultValueIsRussian)
+
     }
+
+
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu, menu)

@@ -8,15 +8,17 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.geekbrains.myweather.R
 import com.geekbrains.myweather.databinding.FragmentMapsYandexMainBinding
-import com.geekbrains.myweather.databinding.FragmentWeatherListBinding
 import com.yandex.mapkit.Animation
 import com.yandex.mapkit.MapKitFactory
 import com.yandex.mapkit.geometry.Point
 import com.yandex.mapkit.map.CameraPosition
 import com.yandex.mapkit.mapview.MapView
+import kotlinx.android.synthetic.main.fragment_maps.*
 
 
 class MapsFragmentYandex : Fragment() {
+
+    private var mapView: MapView? = null
 
     private var _binding: FragmentMapsYandexMainBinding? = null
     private val binding: FragmentMapsYandexMainBinding
@@ -28,8 +30,6 @@ class MapsFragmentYandex : Fragment() {
         super.onDestroy()
         _binding = null
     }
-
-    private val mapView: MapView? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,6 +48,7 @@ class MapsFragmentYandex : Fragment() {
         mapview?.map?.move(
             CameraPosition(Point(55.751574, 37.573856), 11.0f, 0.0f, 0.0f),
             Animation(Animation.Type.SMOOTH, 0F), null)
+
     }
 
     object MapKitInitializer {
@@ -73,15 +74,4 @@ class MapsFragmentYandex : Fragment() {
         MapKitFactory.getInstance().onStart()
         mapView?.onStart()
     }
-//    val locationManager = MapKitFactory.getInstance().createLocationManager()
-//    locationManager!!.requestSingleUpdate(object : LocationListener {
-//
-//        override fun onLocationUpdated(p0: Location) {
-//            TODO("Not yet implemented")
-//        }
-//
-//        override fun onLocationStatusUpdated(p0: LocationStatus) {
-//            TODO("Not yet implemented")
-//        }
-//    })
 }
